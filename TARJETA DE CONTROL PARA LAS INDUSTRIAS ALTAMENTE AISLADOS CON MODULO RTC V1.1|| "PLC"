@@ -1,0 +1,147 @@
+// entradas
+int in1 =2;
+int in2 =3;
+int in3 =4;
+int in4 =5;
+int in5 =6;
+int in6 =7;
+
+int in7 =8; //ENTRADAS CON DIPSWITCH
+int in8 =9; //ENTRADAS CON DIPSWITCH
+
+#include <Wire.h>
+#include "Sodaq_DS3231.h"
+char DiaSemana[][4] = {"Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab" };
+
+
+// salida
+const int triac1 =10;
+const int triac2 =11;
+const int triac3 =17;
+const int triac4=16;
+const int relay1 =15;
+const int relay2 =14;
+const int transistor1 =13;
+const int transistor2 =12;
+
+void setup() {
+  
+    Wire.begin();
+    rtc.begin();
+  
+  //ENTRADAS
+Serial.begin(9600);
+pinMode (in1, INPUT);
+pinMode (in2, INPUT);
+pinMode (in3, INPUT);
+pinMode (in4, INPUT);
+pinMode (in5, INPUT);
+pinMode (in6, INPUT);
+pinMode (in7, INPUT);
+pinMode (in8, INPUT);
+
+//SALIDAS
+pinMode (triac1, OUTPUT);
+pinMode (triac2, OUTPUT);
+pinMode (triac3, OUTPUT);
+pinMode (triac4, OUTPUT);
+pinMode (relay1, OUTPUT);
+pinMode (relay2, OUTPUT);
+pinMode (transistor1, OUTPUT);
+pinMode (transistor2, OUTPUT);
+}
+
+void loop() {
+   int in1_v=digitalRead(in1);
+   int in2_v=digitalRead(in2);
+   int in3_v=digitalRead(in3);
+   int in4_v=digitalRead(in4);
+   int in5_v=digitalRead(in5);
+   int in6_v=digitalRead(in6);
+   int in7_v=digitalRead(in7);
+   int in8_v=digitalRead(in8);
+
+   DateTime now = rtc.now();
+    Serial.print(now.year(), DEC);
+    Serial.print('/');
+    Serial.print(now.month(), DEC);
+    Serial.print('/');
+    Serial.print(now.date(), DEC);
+    Serial.print(' ');
+    Serial.print(now.hour(), DEC);
+    Serial.print(':');
+    Serial.print(now.minute(), DEC);
+    Serial.print(':');
+    Serial.print(now.second(), DEC);
+    Serial.print(' ');
+    Serial.print(DiaSemana[now.dayOfWeek()]);
+    Serial.println();
+   delay(1000); // Se actualiza cada segundo
+if (now.minute()==00){
+  digitalWrite(triac4,1);
+}
+else if (now.minute()>00||now.minute()<00){
+  digitalWrite(triac4,0); 
+}
+
+   if (in1_v==1){
+    digitalWrite (triac1,true);
+   }
+      if (in1_v==0){
+    digitalWrite (triac1,false);
+   }
+
+      if (in2_v==1){
+    digitalWrite (triac2,true);
+   }
+      if (in2_v==0){
+    digitalWrite (triac2,false);
+   }
+
+      if (in3_v==1){
+    digitalWrite (triac3,true);
+   }
+      if (in3_v==0){
+    digitalWrite (triac3,false);
+   }
+
+  /*    if (in4_v==0){
+    digitalWrite (triac4,true);
+   }
+      if (in4_v==1){
+    digitalWrite (triac4,false);
+   }
+*/
+      if (in5_v==1){
+    digitalWrite (relay1,true);
+   }
+      if (in5_v==0){
+    digitalWrite (relay1,false);
+   }
+
+      if (in6_v==1){
+    digitalWrite (relay2,true);
+   }
+      if (in6_v==0){
+    digitalWrite (relay2,false);
+   }
+
+      if (in7_v==1){
+    digitalWrite (transistor1,true);
+   }
+      if (in7_v==0){
+    digitalWrite (transistor1,false);
+   }
+
+      if (in8_v==1){
+    digitalWrite (transistor2,true);
+   }
+      if (in8_v==0){
+    digitalWrite (transistor2,false);
+   }
+
+ 
+
+   
+   
+}
